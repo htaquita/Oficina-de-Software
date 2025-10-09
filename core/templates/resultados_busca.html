@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados da Busca</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="logo">DTJ</div>
+        <nav class="navegacao">
+            <a href="{% url 'home' %}" class="btn-secundario">Nova Busca</a>
+            <a href="#" class="btn-principal">Entrar</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="viagens-disponiveis">
+            <h2>Resultados da sua busca</h2>
+            <div class="listas-viagens" style="grid-template-columns: 1fr;"> <div class="lista">
+                    {% for viagem in resultados %}
+                        <a href="{% url 'detalhes_viagem' viagem.id %}" style="text-decoration: none; color: inherit;">
+                            <div class="item-viagem">
+                                <span>
+                                    {{ viagem.origem }} >> {{ viagem.destino }} >> {{ viagem.data_partida|date:"d/m/Y" }}
+                                </span>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <p>Nenhuma viagem encontrada para os critérios informados.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

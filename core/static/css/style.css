@@ -1,0 +1,143 @@
+/* Reset básico e fontes */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* Cabeçalho */
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #004d40; /* Verde escuro */
+}
+
+.navegacao a {
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    margin-left: 0.5rem;
+    font-weight: bold;
+}
+
+.btn-secundario {
+    background-color: #eee;
+    color: #333;
+}
+
+.btn-principal {
+    background-color: #004d40; /* Verde escuro */
+    color: #fff;
+}
+
+/* Seção de Busca */
+.busca-viagem {
+    background-color: #81c784; /* Verde claro */
+    padding: 2rem;
+}
+
+.form-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+    margin-bottom: 1.5rem;
+}
+
+.opcoes-viagem {
+    margin-bottom: 1rem;
+}
+
+.campos-busca {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    color: #555;
+}
+
+.campo input, .campo select {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-trocar {
+    height: 45px;
+    width: 45px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.btn-buscar {
+    padding: 0.8rem 2rem;
+    border: none;
+    background-color: #004d40;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Seção de Viagens Disponíveis */
+.viagens-disponiveis {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.viagens-disponiveis h2 {
+    margin-bottom: 1.5rem;
+}
+
+.listas-viagens {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background-color: #f4f4f4;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.lista h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.item-viagem {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}

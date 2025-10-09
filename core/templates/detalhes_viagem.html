@@ -1,0 +1,56 @@
+{% load static %} <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Viagem: {{ viagem.origem }} para {{ viagem.destino }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Estilos extras apenas para esta página, para ficar mais organizada */
+        body {
+            background-color: #f4f4f4; /* Um fundo cinza claro */
+        }
+        .detalhes-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .detalhes-container h1 { 
+            color: #004d40;
+            margin-bottom: 1.5rem; 
+        }
+        .detalhes-container p { 
+            line-height: 1.8; 
+            font-size: 1.1rem; 
+            color: #333;
+        }
+        .detalhes-container strong {
+            color: #111;
+        }
+        .btn-voltar {
+            display: inline-block;
+            margin-top: 2rem;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="detalhes-container">
+        <h1>Detalhes da Viagem</h1>
+
+        <p><strong>De:</strong> {{ viagem.origem }}</p>
+        <p><strong>Para:</strong> {{ viagem.destino }}</p>
+        <p><strong>Embarcação:</strong> {{ viagem.embarcacao.nome }}</p>
+        <p><strong>Partida:</strong> {{ viagem.data_partida|date:"d/m/Y às H:i" }}</p>
+        <p><strong>Chegada Prevista:</strong> {{ viagem.data_chegada|date:"d/m/Y às H:i" }}</p>
+        <p><strong>Preço:</strong> R$ {{ viagem.preco }}</p>
+        <p><strong>Vagas Disponíveis:</strong> {{ viagem.vagas_disponiveis }}</p>
+        
+        <a href="{% url 'home' %}" class="btn-secundario btn-voltar">Voltar para a busca</a>
+    </div>
+
+</body>
+</html>

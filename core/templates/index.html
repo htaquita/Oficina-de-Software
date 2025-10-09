@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTJ - Passagens de Barco</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <header class="cabecalho">
+        <div class="logo">DTJ</div>
+        <nav class="navegacao">
+            <a href="{% url 'registrar' %}" class="btn-secundario">Cadastrar</a>
+            <a href="#" class="btn-principal">Entrar</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="busca-viagem">
+            <div class="form-container">
+                <h2>Viagem de Barco</h2>
+                <form id="form-busca" action="{% url 'buscar' %}" method="GET">
+                    <div class="opcoes-viagem">
+                        <label><input type="radio" name="tipo-viagem" value="ida-e-volta" checked> Ida e Volta</label>
+                        <label><input type="radio" name="tipo-viagem" value="somente-ida"> Somente Ida</label>
+                    </div>
+                    <div class="campos-busca">
+                        <div class="campo">
+                            <label>Origem</label>
+                            <select id="origem" name="origem">
+                                <option value="">Selecione a origem</option>
+                                {% for cidade in cidades %}
+                                    <option value="{{ cidade }}">{{ cidade }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        <button type="button" class="btn-trocar">&#8644;</button>
+                        <div class="campo">
+                            <label>Destino</label>
+                            <select id="destino" name="destino">
+                                <option value="">Selecione o destino</option>
+                                {% for cidade in cidades %}
+                                    <option value="{{ cidade }}">{{ cidade }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        <div class="campo">
+                            <label>Quando vai?</label>
+                            <input type="date" id="data-ida" name="data_ida">
+                        </div>
+                        <div class="campo" id="campo-data-volta">
+                            <label>Quando volta?</label>
+                            <input type="date" id="data-volta" name="data_volta">
+                        </div>
+                        <button type="submit" class="btn-buscar">Buscar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="viagens-disponiveis">
+            <h2>Viagens de Barcos disponíveis</h2>
+            <div class="listas-viagens">
+                <div class="lista">
+                    <h3>Barcos saindo de Manaus</h3>
+                    <div id="lista-saindo-manaus">
+                        {% for viagem in viagens_saindo %}
+                            <a href="{% url 'detalhes_viagem' viagem.id %}" style="text-decoration: none; color: inherit;">
+                                <div class="item-viagem">
+                                    <span>
+                                        {{ viagem.origem }} >> {{ viagem.destino }} >> {{ viagem.data_partida|date:"d/m/Y" }}
+                                    </span>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p>Nenhuma viagem encontrada.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="lista">
+                    <h3>Barcos para Manaus</h3>
+                    <div id="lista-para-manaus">
+                        {% for viagem in viagens_chegando %}
+                            <a href="{% url 'detalhes_viagem' viagem.id %}" style="text-decoration: none; color: inherit;">
+                                <div class="item-viagem">
+                                    <span>
+                                        {{ viagem.origem }} >> {{ viagem.destino }} >> {{ viagem.data_partida|date:"d/m/Y" }}
+                                    </span>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p>Nenhuma viagem encontrada.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
