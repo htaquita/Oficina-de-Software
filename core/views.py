@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Viagem
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     viagens_saindo_manaus = Viagem.objects.filter(origem="Manaus")
@@ -52,18 +54,53 @@ def buscar(request):
     return render(request, 'resultados_busca.html', context)
 
 def registrar(request):
-    # Se o método for POST, significa que o usuário enviou o formulário
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
-        # Se o formulário for válido...
         if form.is_valid():
-            form.save() # Salva o novo usuário no banco de dados
+            # 1. Salva o formulário E pega o novo objeto de usuário criado
+            user = form.save() 
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Conta criada com sucesso para {username}! Você já pode fazer o login.')
-            return redirect('home') # Redireciona para a página inicial
-    # Se for um GET, apenas mostra um formulário em branco
+            
+            # 2. Faz o login do novo usuário na sessão atual
+            login(request, user)
+            
+            # 3. A mensagem agora é de boas-vindas, não de "faça o login"
+            messages.success(request, f'Conta criada com sucesso! Bem-vindo, {username}!')
+            
+            return redirect('home')
     else:
         form = UserCreationForm()
         
     context = {'form': form}
     return render(request, 'registrar.html', context)
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            # Pega os dados limpos do formulário
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            
+            # Autentica o usuário
+            user = authenticate(username=username, password=password)
+            
+            # Se o usuário for válido, inicia a sessão
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Bem-vindo de volta, {username}!')
+                return redirect('home')
+            else:
+                messages.error(request, 'Nome de usuário ou senha inválidos.')
+        else:
+            messages.error(request, 'Nome de usuário ou senha inválidos.')
+    else:
+        form = AuthenticationForm()
+        
+    context = {'form': form}
+    return render(request, 'login.html', context)
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, 'Você saiu da sua conta com sucesso.')
+    return redirect('home')

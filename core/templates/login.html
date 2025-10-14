@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style> /* Estilos reaproveitados da página de registro */
+        .auth-container { max-width: 500px; margin: 3rem auto; padding: 2rem; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Acesse sua Conta</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <p style="color: red; font-size: 0.9rem; margin-top: 5px;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-principal" style="width: 100%; padding: 0.8rem; font-size: 1.1rem;">Entrar</button>
+        </form>
+        <br>
+        <p>Não tem uma conta? <a href="{% url 'registrar' %}">Cadastre-se</a></p>
+    </div>
+</body>
+</html>

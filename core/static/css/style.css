@@ -6,8 +6,10 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif; /* <-- NOVA FONTE APLICADA */
     background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
 }
 
 /* Cabeçalho */
@@ -23,7 +25,7 @@ body {
 .logo {
     font-size: 2rem;
     font-weight: bold;
-    color: #004d40; /* Verde escuro */
+    color: #004d40;
 }
 
 .navegacao a {
@@ -32,22 +34,29 @@ body {
     border-radius: 8px;
     margin-left: 0.5rem;
     font-weight: bold;
+    transition: all 0.2s ease-in-out; /* <-- Efeito de transição */
 }
 
 .btn-secundario {
     background-color: #eee;
     color: #333;
 }
+.btn-secundario:hover {
+    background-color: #ddd; /* <-- Efeito de hover */
+}
 
 .btn-principal {
-    background-color: #004d40; /* Verde escuro */
+    background-color: #004d40;
     color: #fff;
+}
+.btn-principal:hover {
+    background-color: #00695c; /* <-- Efeito de hover */
 }
 
 /* Seção de Busca */
 .busca-viagem {
-    background-color: #81c784; /* Verde claro */
-    padding: 2rem;
+    background-color: #2e7d32; /* Tom de verde mais sóbrio */
+    padding: 2.5rem 1rem;
 }
 
 .form-container {
@@ -56,32 +65,50 @@ body {
     background-color: #fff;
     padding: 2rem;
     border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12); /* Sombra mais suave */
 }
 
 .form-container h2 {
     margin-bottom: 1.5rem;
+    font-weight: 500;
 }
 
 .opcoes-viagem {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
 }
 
 .campos-busca {
     display: flex;
     align-items: flex-end;
-    gap: 1rem;
+    gap: 1.5rem; /* Mais espaçamento */
+    flex-wrap: wrap; /* Para telas menores */
 }
 
 .campo {
     display: flex;
     flex-direction: column;
+    flex-grow: 1; /* Para os campos crescerem igualmente */
 }
 
 .campo label {
     font-size: 0.9rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     color: #555;
+    font-weight: 500;
+}
+
+/* NOVO: Wrapper para campo com ícone */
+.campo-com-icone {
+    position: relative;
+}
+.campo-com-icone i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
 }
 
 .campo input, .campo select {
@@ -89,6 +116,10 @@ body {
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+}
+.campo-com-icone input, .campo-com-icone select {
+    padding-left: 40px; /* Espaço para o ícone */
 }
 
 .btn-trocar {
@@ -99,6 +130,11 @@ body {
     background-color: #fff;
     cursor: pointer;
     font-size: 1.2rem;
+    transition: all 0.2s ease-in-out;
+}
+.btn-trocar:hover {
+    transform: rotate(180deg); /* Efeito de hover */
+    background-color: #f0f0f0;
 }
 
 .btn-buscar {
@@ -110,11 +146,15 @@ body {
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+.btn-buscar:hover {
+    background-color: #00695c;
 }
 
 /* Seção de Viagens Disponíveis */
 .viagens-disponiveis {
-    padding: 2rem;
+    padding: 2.5rem 1rem;
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -127,7 +167,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    background-color: #f4f4f4;
+    background-color: #f8f9fa;
     padding: 1.5rem;
     border-radius: 8px;
 }
@@ -135,9 +175,70 @@ body {
 .lista h3 {
     margin-bottom: 1rem;
     color: #333;
+    border-bottom: 2px solid #2e7d32;
+    padding-bottom: 0.5rem;
 }
 
 .item-viagem {
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    padding: 0.8rem;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+.item-viagem:hover {
+    background-color: #e9ecef; /* Efeito de hover */
+    transform: translateX(5px); /* Efeito de hover */
+}
+
+.nav-welcome {
+    color: #333;
+    font-weight: 500;
+    margin-right: 1.5rem;
+    align-self: center; /* Para alinhar verticalmente com os botões */
+}
+
+/* Adicione ao final de style.css */
+.django-messages {
+    max-width: 1000px;
+    margin: 1rem auto;
+    padding: 0;
+    list-style-type: none;
+}
+.django-messages p {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+}
+.django-messages .success {
+    background-color: #2e7d32; /* Verde */
+}
+.django-messages .error {
+    background-color: #c62828; /* Vermelho */
+}
+.django-messages .info {
+    background-color: #0277bd; /* Azul */
+}
+
+/* Adicione ao FINAL de style.css */
+
+/* ============== DESIGN RESPONSIVO ============== */
+/* Para telas com largura máxima de 768px (tablets e celulares) */
+@media (max-width: 768px) {
+
+    .cabecalho {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .campos-busca {
+        flex-direction: column; /* Coloca os campos um abaixo do outro */
+        align-items: stretch; /* Faz os campos ocuparem a largura total */
+    }
+
+    .listas-viagens {
+        grid-template-columns: 1fr; /* Transforma as duas colunas em uma só */
+    }
 }
