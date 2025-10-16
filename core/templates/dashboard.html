@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Dono - DTJ Passagens</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="logo">DTJ</div>
+        <nav class="navegacao">
+            {% if user.is_authenticated %}
+                <span class="nav-welcome">Olá, {{ user.username }}</span>
+                {% if user.groups.all.0.name == 'Donos de Barco' %}
+                    <a href="{% url 'dashboard' %}" class="btn-principal">Meu Dashboard</a>
+                {% else %}
+                    <a href="{% url 'minhas_passagens' %}" class="btn-secundario">Minhas Passagens</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn-secundario">Sair</a>
+            {% else %}
+                <a href="{% url 'registrar' %}" class="btn-secundario">Cadastrar</a>
+                <a href="{% url 'login' %}" class="btn-principal">Entrar</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <div class="dashboard-container">
+            <h2>Dashboard do Dono da Embarcação</h2>
+            <p>Bem-vindo, {{ user.username }}!</p>
+            
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">Minhas Embarcações</h3>
+                    <a href="{% url 'adicionar_embarcacao' %}" class="btn-principal">Adicionar Embarcação</a>
+                </div>
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Nome da Embarcação</th>
+                            <th>Capacidade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for embarcacao in embarcacoes %}
+                        <tr>
+                            <td>{{ embarcacao.nome }}</td>
+                            <td>{{ embarcacao.capacidade }} passageiros</td>
+                            <td>
+                                <a href="{% url 'editar_embarcacao' embarcacao.id %}" class="action-link">Editar</a>
+                                <a href="{% url 'apagar_embarcacao' embarcacao.id %}" class="action-link delete">Apagar</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="empty-row">
+                            <td colspan="3">Você ainda não cadastrou nenhuma embarcação.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">Viagens Programadas</h3>
+                    <a href="{% url 'adicionar_viagem' %}" class="btn-principal">Programar Viagem</a>
+                </div>
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Embarcação</th>
+                            <th>Rota</th>
+                            <th>Data da Partida</th>
+                            <th>Vagas</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for viagem in viagens %}
+                        <tr>
+                            <td>{{ viagem.embarcacao.nome }}</td>
+                            <td>{{ viagem.origem }} -> {{ viagem.destino }}</td>
+                            <td>{{ viagem.data_partida|date:"d/m/Y H:i" }}</td>
+                            <td>{{ viagem.vagas_disponiveis }}</td>
+                            <td>
+                                <a href="{% url 'editar_viagem' viagem.id %}" class="action-link">Editar</a>
+                                <a href="{% url 'apagar_viagem' viagem.id %}" class="action-link delete">Apagar</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="empty-row">
+                            <td colspan="5">Nenhuma viagem programada para suas embarcações.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

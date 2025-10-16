@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Exclusão</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .confirm-container { max-width: 600px; margin: 3rem auto; padding: 2rem; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+        .confirm-actions { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; }
+    </style>
+</head>
+<body>
+    <header class="cabecalho">
+        </header>
+
+    <main>
+        <div class="confirm-container">
+            <h2>Confirmar Exclusão</h2>
+            <p>Você tem certeza que deseja apagar a embarcação permanentemente?</p>
+            <h3 style="margin-top: 1rem; color: #c62828;">"{{ embarcacao.nome }}"</h3>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="confirm-actions">
+                    <button type="submit" class="btn-principal" style="background-color: #c62828;">Sim, apagar</button>
+                    <a href="{% url 'dashboard' %}" class="btn-secundario">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

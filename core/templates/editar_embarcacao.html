@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Embarcação - DTJ Passagens</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Estilos reaproveitados da página de adição */
+        .form-container-page { max-width: 700px; margin: 3rem auto; padding: 2rem; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 8px; }
+        .form-actions { display: flex; gap: 1rem; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="logo">DTJ</div>
+        <nav class="navegacao">
+            {% if user.is_authenticated %}
+                <span class="nav-welcome">Olá, {{ user.username }}</span>
+                {% if user.groups.all.0.name == 'Donos de Barco' %}
+                    <a href="{% url 'dashboard' %}" class="btn-principal">Meu Dashboard</a>
+                {% else %}
+                    <a href="{% url 'minhas_passagens' %}" class="btn-secundario">Minhas Passagens</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn-secundario">Sair</a>
+            {% else %}
+                <a href="{% url 'registrar' %}" class="btn-secundario">Cadastrar</a>
+                <a href="{% url 'login' %}" class="btn-principal">Entrar</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-container-page">
+            <h2>Editar Embarcação</h2>
+            <form method="POST">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <div style="color: red; font-size: 0.9rem; margin-top: 5px;">
+                                {% for error in field.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-principal">Salvar Alterações</button>
+                    <a href="{% url 'dashboard' %}" class="btn-secundario">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

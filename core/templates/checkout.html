@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Dados do Passageiro</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="logo">DTJ</div>
+        <nav class="navegacao">
+            {% if user.is_authenticated %}
+                <span class="nav-welcome">Olá, {{ user.username }}</span>
+                {% if user.groups.all.0.name == 'Donos de Barco' %}
+                    <a href="{% url 'dashboard' %}" class="btn-principal">Meu Dashboard</a>
+                {% else %}
+                    <a href="{% url 'minhas_passagens' %}" class="btn-secundario">Minhas Passagens</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn-secundario">Sair</a>
+            {% else %}
+                <a href="{% url 'registrar' %}" class="btn-secundario">Cadastrar</a>
+                <a href="{% url 'login' %}" class="btn-principal">Entrar</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="checkout-container">
+        
+        <div class="progress-bar">
+            <div class="step active"><div class="circle">1</div>Dados dos Passageiros</div>
+            <div class="step"><div class="circle">2</div>Pagamento</div>
+            <div class="step"><div class="circle">3</div>Confirmação e Bilhetes</div>
+        </div>
+
+        <form class="checkout-body" method="POST" action="{% url 'checkout' viagem.id %}">
+            {% csrf_token %}
+
+            <div class="form-section">
+                <h3>Preencha os dados dos passageiros</h3>
+                <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                    <h4>Passageiro 1 <small style="font-weight: normal;">(Adulto)</small></h4>
+                    
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            <div class="errorlist">{{ field.errors }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Resumo do Pedido</h3>
+                <p><strong>Origem:</strong> {{ viagem.origem }}</p>
+                <p><strong>Destino:</strong> {{ viagem.destino }}</p>
+                <p><strong>Embarcação:</strong> {{ viagem.embarcacao.nome }}</p>
+                <p><strong>Partida:</strong> {{ viagem.data_partida|date:"d/m/Y H:i" }}</p>
+                <hr>
+                <p><strong>Subtotal:</strong> <strong style="font-size: 1.5rem; color: #004d40;">R$ {{ viagem.preco|floatformat:2 }}</strong></p>
+                
+                <button type="submit" class="btn-principal" style="width: 100%; margin-top: 1rem;">Ir para Pagamento</button>
+                <a href="{% url 'detalhes_viagem' viagem.id %}" class="btn-secundario" style="width: 100%; text-align: center; display: block; margin-top: 0.5rem;">Voltar</a>
+            </div>
+            
+        </form>
+    </main>
+</body>
+</html>

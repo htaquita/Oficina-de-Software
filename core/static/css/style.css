@@ -1,4 +1,32 @@
-/* Reset básico e fontes */
+/* ============================================= */
+/* 1. VARIÁVEIS GLOBAIS E ESTILOS DE BASE        */
+/* ============================================= */
+:root {
+    /* Paleta de Cores Principal */
+    --cor-primaria: #004d40;
+    --cor-primaria-hover: #00695c;
+    --cor-destaque: #5DA684;
+    --cor-secundaria: #eee;
+    --cor-secundaria-hover: #ddd;
+
+    /* Cores de Texto e Fundo */
+    --cor-texto: #333;
+    --cor-texto-suave: #555;
+    --cor-fundo: #f0f2f5;
+    --cor-fundo-card: #fff;
+    --cor-fundo-suave: #f8f9fa;
+    
+    /* Cores de Feedback */
+    --cor-sucesso: #2e7d32;
+    --cor-erro: #c62828;
+    --cor-info: #0277bd;
+
+    /* Outras Variáveis */
+    --fonte-principal: 'Roboto', sans-serif;
+    --raio-borda: 8px;
+    --sombra-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,100 +34,195 @@
 }
 
 body {
-    font-family: 'Roboto', sans-serif; /* <-- NOVA FONTE APLICADA */
-    background-color: #f0f2f5;
-    color: #333;
+    font-family: var(--fonte-principal);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
     line-height: 1.6;
 }
 
-/* Cabeçalho */
+/* ============================================= */
+/* 2. COMPONENTES E CLASSES GLOBAIS              */
+/* ============================================= */
+
+/* --- Botões --- */
+.btn-principal, .btn-secundario {
+    text-decoration: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--raio-borda);
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-principal {
+    background-color: var(--cor-primaria);
+    color: var(--cor-fundo-card);
+}
+.btn-principal:hover {
+    background-color: var(--cor-primaria-hover);
+}
+
+.btn-secundario {
+    background-color: var(--cor-secundaria);
+    color: var(--cor-texto);
+}
+.btn-secundario:hover {
+    background-color: var(--cor-secundaria-hover);
+}
+
+/* --- Mensagens do Django --- */
+.django-messages {
+    max-width: 1000px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+.django-messages p {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: var(--raio-borda);
+    color: #fff;
+    font-weight: 500;
+}
+.django-messages .success { background-color: var(--cor-sucesso); }
+.django-messages .error { background-color: var(--cor-erro); }
+.django-messages .info { background-color: var(--cor-info); }
+
+
+/* ============================================= */
+/* 3. ESTILOS POR SEÇÃO DO SITE                  */
+/* ============================================= */
+
+/* --- Cabeçalho --- */
 .cabecalho {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
+    background-color: var(--cor-fundo-card);
+    border-bottom: 1px solid var(--cor-secundaria-hover);
 }
-
-.logo {
-    font-size: 2rem;
+.logo img {
+    height: 40px;
+}
+.nav-welcome {
+    color: var(--cor-texto);
+    font-weight: 500;
+    margin-right: 1.5rem;
+    align-self: center;
+}
+.profile-menu {
+    position: relative;
+}
+.profile-icon-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--cor-primaria);
+    background-color: var(--cor-fundo-card);
+    color: var(--cor-primaria);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: var(--cor-fundo-card);
+    border-radius: var(--raio-borda);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    min-width: 180px;
+    z-index: 100;
+    overflow: hidden;
+}
+.profile-menu:hover .profile-dropdown {
+    display: block;
+}
+.dropdown-header {
+    padding: 0.8rem 1rem;
     font-weight: bold;
-    color: #004d40;
+    color: var(--cor-texto);
+    border-bottom: 1px solid var(--cor-secundaria);
 }
-
-.navegacao a {
+.dropdown-item {
+    display: block;
+    padding: 0.8rem 1rem;
     text-decoration: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    margin-left: 0.5rem;
-    font-weight: bold;
-    transition: all 0.2s ease-in-out; /* <-- Efeito de transição */
+    color: var(--cor-texto);
+}
+.dropdown-item:hover {
+    background-color: var(--cor-fundo-suave);
 }
 
-.btn-secundario {
-    background-color: #eee;
-    color: #333;
-}
-.btn-secundario:hover {
-    background-color: #ddd; /* <-- Efeito de hover */
-}
-
-.btn-principal {
-    background-color: #004d40;
-    color: #fff;
-}
-.btn-principal:hover {
-    background-color: #00695c; /* <-- Efeito de hover */
-}
-
-/* Seção de Busca */
+/* --- Seção de Busca (Home) --- */
 .busca-viagem {
-    background-color: #2e7d32; /* Tom de verde mais sóbrio */
+    background-color: var(--cor-destaque);
     padding: 2.5rem 1rem;
 }
-
 .form-container {
     max-width: 1000px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: var(--cor-fundo-card);
     padding: 2rem;
     border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12); /* Sombra mais suave */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
-
 .form-container h2 {
     margin-bottom: 1.5rem;
     font-weight: 500;
 }
-
-.opcoes-viagem {
+.radio-toggle {
+    display: inline-flex;
+    background-color: var(--cor-secundaria);
+    border-radius: 20px;
+    padding: 4px;
     margin-bottom: 1.5rem;
-    display: flex;
-    gap: 1.5rem;
 }
-
+.radio-toggle input[type="radio"] {
+    display: none;
+}
+.radio-toggle label {
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--cor-texto-suave);
+    transition: all 0.2s ease-in-out;
+}
+.radio-toggle input[type="radio"]:checked + label {
+    background-color: var(--cor-fundo-card);
+    color: var(--cor-primaria);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
 .campos-busca {
     display: flex;
+    flex-direction: column;
     align-items: flex-end;
-    gap: 1.5rem; /* Mais espaçamento */
-    flex-wrap: wrap; /* Para telas menores */
+    gap: 1rem;
 }
-
+.input-group {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    align-items: flex-end;
+}
 .campo {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Para os campos crescerem igualmente */
+    flex-grow: 1;
 }
-
 .campo label {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: var(--cor-texto-suave);
     font-weight: 500;
 }
-
-/* NOVO: Wrapper para campo com ícone */
 .campo-com-icone {
     position: relative;
 }
@@ -110,135 +233,290 @@ body {
     transform: translateY(-50%);
     color: #888;
 }
-
 .campo input, .campo select {
     padding: 0.8rem;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: var(--raio-borda);
     font-size: 1rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--fonte-principal);
 }
 .campo-com-icone input, .campo-com-icone select {
-    padding-left: 40px; /* Espaço para o ícone */
+    padding-left: 40px;
 }
-
 .btn-trocar {
     height: 45px;
     width: 45px;
     border: 1px solid #ccc;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: var(--cor-fundo-card);
     cursor: pointer;
     font-size: 1.2rem;
     transition: all 0.2s ease-in-out;
+    flex-shrink: 0;
 }
 .btn-trocar:hover {
-    transform: rotate(180deg); /* Efeito de hover */
+    transform: rotate(180deg);
     background-color: #f0f0f0;
 }
-
 .btn-buscar {
-    padding: 0.8rem 2rem;
-    border: none;
-    background-color: #004d40;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
-.btn-buscar:hover {
-    background-color: #00695c;
+    width: 25%;
+    min-width: 150px;
 }
 
-/* Seção de Viagens Disponíveis */
+/* --- Lista de Viagens (Home) --- */
 .viagens-disponiveis {
     padding: 2.5rem 1rem;
     max-width: 1000px;
     margin: 0 auto;
+    background-color: var(--cor-fundo-card);
 }
-
-.viagens-disponiveis h2 {
-    margin-bottom: 1.5rem;
-}
-
 .listas-viagens {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    background-color: #f8f9fa;
+    background-color: #f1f3f5;
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 12px;
 }
-
 .lista h3 {
     margin-bottom: 1rem;
-    color: #333;
-    border-bottom: 2px solid #2e7d32;
-    padding-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--cor-primaria);
 }
-
 .item-viagem {
-    margin-bottom: 0.5rem;
     font-size: 0.9rem;
     padding: 0.8rem;
     border-radius: 6px;
     transition: all 0.2s ease-in-out;
 }
 .item-viagem:hover {
-    background-color: #e9ecef; /* Efeito de hover */
-    transform: translateX(5px); /* Efeito de hover */
+    background-color: var(--cor-secundaria-hover);
+    transform: translateX(5px);
 }
 
-.nav-welcome {
-    color: #333;
-    font-weight: 500;
-    margin-right: 1.5rem;
-    align-self: center; /* Para alinhar verticalmente com os botões */
-}
-
-/* Adicione ao final de style.css */
-.django-messages {
-    max-width: 1000px;
-    margin: 1rem auto;
-    padding: 0;
-    list-style-type: none;
-}
-.django-messages p {
+/* --- Dashboard --- */
+.dashboard-container {
+    max-width: 1100px;
+    margin: 2rem auto;
     padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
+}
+.dashboard-section {
+    background-color: var(--cor-fundo-card);
+    padding: 2rem;
+    border-radius: var(--raio-borda);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-top: 2.5rem;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--cor-secundaria);
+}
+.section-title {
+    color: var(--cor-texto);
+    margin: 0;
+}
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.dashboard-table th, .dashboard-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--cor-secundaria-hover);
+    text-align: left;
+}
+.dashboard-table thead {
+    background-color: var(--cor-fundo-suave);
+}
+.dashboard-table th {
+    font-weight: 500;
+    color: var(--cor-texto-suave);
+}
+.dashboard-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+.action-link {
+    text-decoration: none;
+    color: var(--cor-primaria);
+    font-weight: 500;
+    margin-right: 1rem;
+}
+.action-link.delete {
+    color: var(--cor-erro);
+}
+.action-link:hover {
+    text-decoration: underline;
+}
+.empty-row td {
+    text-align: center;
+    padding: 2rem;
+    color: #777;
+}
+
+/* --- Fluxo de Compra --- */
+.checkout-container, .confirmation-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+.progress-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+.step {
+    flex: 1;
+    text-align: center;
+    color: #aaa;
+    position: relative;
+}
+.step.active {
+    color: var(--cor-primaria);
+    font-weight: bold;
+}
+.step .circle {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    background-color: var(--cor-secundaria);
+    margin-bottom: 0.5rem;
+    border: 2px solid #aaa;
+    transition: all 0.3s ease;
+}
+.step.active .circle {
+    background-color: var(--cor-primaria);
     color: #fff;
+    border-color: var(--cor-primaria);
+}
+.progress-bar .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: var(--cor-secundaria);
+    z-index: -1;
+}
+.checkout-body, .payment-body {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+.form-section, .summary-section, .payment-options {
+    background-color: var(--cor-fundo-card);
+    padding: 2rem;
+    border-radius: var(--raio-borda);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.form-group {
+    margin-bottom: 1.2rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
     font-weight: 500;
 }
-.django-messages .success {
-    background-color: #2e7d32; /* Verde */
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: var(--raio-borda);
+    font-family: var(--fonte-principal);
+    font-size: 1rem;
 }
-.django-messages .error {
-    background-color: #c62828; /* Vermelho */
+.errorlist {
+    list-style-type: none;
+    padding: 0;
+    color: var(--cor-erro);
+    font-size: 0.9rem;
+    margin-top: 5px;
 }
-.django-messages .info {
-    background-color: #0277bd; /* Azul */
+.payment-method {
+    border: 2px solid var(--cor-secundaria-hover);
+    border-radius: var(--raio-borda);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+}
+.payment-method.active {
+    border-color: var(--cor-primaria);
+}
+.payment-method i {
+    font-size: 2rem;
+    color: var(--cor-texto);
+}
+.bilhete-container {
+    background-color: var(--cor-fundo-card);
+    border: 1px solid var(--cor-secundaria-hover);
+    border-radius: 12px;
+    box-shadow: var(--sombra-card);
+    margin-top: 2rem;
+    text-align: left;
+}
+.bilhete-header {
+    background-color: var(--cor-primaria);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 12px 12px 0 0;
+}
+.bilhete-body {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+.bilhete-info p {
+    margin-bottom: 0.8rem;
+}
+.bilhete-qr {
+    text-align: center;
+    border-left: 1px dashed #ccc;
+    padding-left: 2rem;
+}
+.qr-code-placeholder {
+    width: 150px;
+    height: 150px;
+    border: 2px solid var(--cor-texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem auto;
+}
+.nav-buttons {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
 
-/* Adicione ao FINAL de style.css */
-
-/* ============== DESIGN RESPONSIVO ============== */
-/* Para telas com largura máxima de 768px (tablets e celulares) */
+/* ============================================= */
+/* 4. DESIGN RESPONSIVO                          */
+/* ============================================= */
 @media (max-width: 768px) {
-
     .cabecalho {
         flex-direction: column;
         gap: 1rem;
     }
-
-    .campos-busca {
-        flex-direction: column; /* Coloca os campos um abaixo do outro */
-        align-items: stretch; /* Faz os campos ocuparem a largura total */
+    .campos-busca, .input-group, .checkout-body, .payment-body, .bilhete-body, .listas-viagens {
+        flex-direction: column;
+        grid-template-columns: 1fr;
     }
-
-    .listas-viagens {
-        grid-template-columns: 1fr; /* Transforma as duas colunas em uma só */
+    .campos-busca {
+        align-items: stretch;
+    }
+    .btn-buscar {
+        width: 100%;
     }
 }

@@ -5,29 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTJ - Passagens de Barco</title>
-    <script src="https://kit.fontawesome.com/seu-codigo-aqui.js" crossorigin="anonymous"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" crossorigin="anonymous"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
     <header class="cabecalho">
-        <div class="logo">DTJ</div>
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/logo.png' %}" alt="Logo DTJ" height="40">
+            </a>
+        </div>
         <nav class="navegacao">
-            {% if user.is_authenticated %}
-                <span class="nav-welcome">Olá, {{ user.username }}</span>
-                <a href="{% url 'logout' %}" class="btn-secundario">Sair</a>
-            {% else %}
-                <a href="{% url 'registrar' %}" class="btn-secundario">Cadastrar</a>
-                <a href="{% url 'login' %}" class="btn-principal">Entrar</a>
-            {% endif %}
+            <div class="profile-menu">
+                <button class="profile-icon-btn">
+                    <i class="fa-solid fa-user"></i>
+                </button>
+                <div class="profile-dropdown">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown-header">Olá, {{ user.username }}</div>
+                        {% if user.groups.all.0.name == 'Donos de Barco' %}
+                            <a href="{% url 'dashboard' %}" class="dropdown-item">Meu Dashboard</a>
+                        {% else %}
+                            <a href="{% url 'minhas_passagens' %}" class="dropdown-item">Minhas Passagens</a>
+                        {% endif %}
+                        <a href="{% url 'logout' %}" class="dropdown-item">Sair</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="dropdown-item">Entrar</a>
+                        <a href="{% url 'registrar' %}" class="dropdown-item">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
         </nav>
     </header>
 
     <main>
-
         {% if messages %}
             <div class="django-messages">
                 {% for message in messages %}
@@ -40,57 +56,56 @@
             <div class="form-container">
                 <h2>Viagem de Barco</h2>
                 <form id="form-busca" action="{% url 'buscar' %}" method="GET">
-                    <div class="opcoes-viagem">
-                        <label><input type="radio" name="tipo-viagem" value="ida-e-volta" checked> Ida e Volta</label>
-                        <label><input type="radio" name="tipo-viagem" value="somente-ida"> Somente Ida</label>
+                    <div class="opcoes-viagem radio-toggle">
+                        <input type="radio" id="somente-ida" name="tipo-viagem" value="somente-ida">
+                        <label for="somente-ida">Somente Ida</label>
+                        <input type="radio" id="ida-e-volta" name="tipo-viagem" value="ida-e-volta" checked>
+                        <label for="ida-e-volta">Ida e Volta</label>
                     </div>
+
                     <div class="campos-busca">
-    
-                        <div class="campo">
-                            <label>Origem</label>
-                            <div class="campo-com-icone">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <select id="origem" name="origem">
-                                    <option value="">Selecione a origem</option>
-                                    {% for cidade in cidades %}
-                                        <option value="{{ cidade }}">{{ cidade }}</option>
-                                    {% endfor %}
-                                </select>
+                        <div class="input-group">
+                            <div class="campo">
+                                <label>Origem</label>
+                                <div class="campo-com-icone">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <select id="origem" name="origem">
+                                        <option value="">Selecione a origem</option>
+                                        {% for cidade in cidades %}
+                                            <option value="{{ cidade }}">{{ cidade }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-trocar">&#8644;</button>
+                            <div class="campo">
+                                <label>Destino</label>
+                                <div class="campo-com-icone">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <select id="destino" name="destino">
+                                        <option value="">Selecione o destino</option>
+                                        {% for cidade in cidades %}
+                                            <option value="{{ cidade }}">{{ cidade }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="campo">
+                                <label>Quando vai?</label>
+                                <div class="campo-com-icone">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <input type="date" id="data-ida" name="data_ida">
+                                </div>
+                            </div>
+                            <div class="campo" id="campo-data-volta">
+                                <label>Quando volta?</label>
+                                <div class="campo-com-icone">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <input type="date" id="data-volta" name="data_volta">
+                                </div>
                             </div>
                         </div>
-
-                        <button type="button" class="btn-trocar">&#8644;</button>
-                        
-                        <div class="campo">
-                            <label>Destino</label>
-                            <div class="campo-com-icone">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <select id="destino" name="destino">
-                                    <option value="">Selecione o destino</option>
-                                    {% for cidade in cidades %}
-                                        <option value="{{ cidade }}">{{ cidade }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="campo">
-                            <label>Quando vai?</label>
-                            <div class="campo-com-icone">
-                                <i class="fa-solid fa-calendar-days"></i>
-                                <input type="date" id="data-ida" name="data_ida">
-                            </div>
-                        </div>
-
-                        <div class="campo" id="campo-data-volta">
-                            <label>Quando volta?</label>
-                            <div class="campo-com-icone">
-                                <i class="fa-solid fa-calendar-days"></i>
-                                <input type="date" id="data-volta" name="data_volta">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-buscar">Buscar</button>
+                        <button type="submit" class="btn-principal btn-buscar">Buscar</button>
                     </div>
                 </form>
             </div>
@@ -134,7 +149,6 @@
             </div>
         </section>
     </main>
-
     <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
-{% load static %} <!DOCTYPE html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -38,6 +39,19 @@
 </head>
 <body>
 
+    <header class="cabecalho">
+        <div class="logo">DTJ</div>
+        <nav class="navegacao">
+            {% if user.is_authenticated %}
+                <span class="nav-welcome">Olá, {{ user.username }}</span>
+                <a href="{% url 'minhas_passagens' %}" class="btn-secundario">Minhas Passagens</a>
+                <a href="{% url 'logout' %}" class="btn-secundario">Sair</a>
+            {% else %}
+                <a href="{% url 'registrar' %}" class="btn-secundario">Cadastrar</a>
+                <a href="{% url 'login' %}" class="btn-principal">Entrar</a>
+            {% endif %}
+        </nav>
+    </header>
     <div class="detalhes-container">
         <h1>Detalhes da Viagem</h1>
 
@@ -48,6 +62,18 @@
         <p><strong>Chegada Prevista:</strong> {{ viagem.data_chegada|date:"d/m/Y às H:i" }}</p>
         <p><strong>Preço:</strong> R$ {{ viagem.preco }}</p>
         <p><strong>Vagas Disponíveis:</strong> {{ viagem.vagas_disponiveis }}</p>
+        
+        <br>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'checkout' viagem.id %}" class="btn-principal" style="width: 100%; padding: 0.8rem; font-size: 1.1rem; text-align: center; text-decoration: none;">
+                Selecionar e Continuar
+            </a>
+        {% else %}
+            <p style="text-align: center; background-color: #fffde7; padding: 1rem; border-radius: 8px;">
+                Você precisa <a href="{% url 'login' %}">fazer o login</a> para comprar uma passagem.
+            </p>
+        {% endif %}
         
         <a href="{% url 'home' %}" class="btn-secundario btn-voltar">Voltar para a busca</a>
     </div>

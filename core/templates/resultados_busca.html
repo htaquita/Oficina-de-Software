@@ -3,36 +3,183 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Resultados da Busca</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passagens Disponíveis - DTJ</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        .search-results-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .filter-button { background-color: #eee; border: none; padding: 0.7rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 1rem; color: #333; display: flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; }
+        .filter-button:hover { background-color: #ddd; }
+        .filter-options { display: flex; align-items: center; gap: 0.8rem; background-color: #eee; padding: 0.5rem 1rem; border-radius: 8px; }
+        .filter-link { text-decoration: none; color: #004d40; font-weight: 500; }
+        .filter-link:hover { text-decoration: underline; }
+        
+        /* Estilos para os Cards de Resultado da Busca (já deve existir no style.css, mas se não, inclua) */
+        .card-viagem {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 500;
+        }
+        .card-title i { color: #004d40; } /* Cor do ícone do barco */
+        .card-info {
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: #004d40;
+        }
+        .card-body {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 1.5rem;
+        }
+        .card-trecho {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .card-trecho span {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .card-trecho strong {
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .card-arrow {
+            font-size: 1.5rem;
+            color: #888;
+            margin: 0 1rem;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+        .card-valor {
+            font-size: 1.1rem;
+        }
+        .card-valor strong {
+            font-size: 1.5rem;
+            color: #004d40;
+        }
+        .btn-selecionar {
+            background-color: #004d40;
+            color: #fff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .btn-selecionar:hover {
+            background-color: #00332c;
+        }
+        .tag-embarcacao {
+            background-color: #e0e0e0;
+            color: #555;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <header class="cabecalho">
         <div class="logo">DTJ</div>
         <nav class="navegacao">
-            <a href="{% url 'home' %}" class="btn-secundario">Nova Busca</a>
-            <a href="#" class="btn-principal">Entrar</a>
+            {% if user.is_authenticated %}
+                <span class="nav-welcome">Olá, {{ user.username }}</span>
+                {% if user.groups.all.0.name == 'Donos de Barco' %}
+                    <a href="{% url 'dashboard' %}" class="btn-principal">Meu Dashboard</a>
+                {% else %}
+                    <a href="{% url 'minhas_passagens' %}" class="btn-secundario">Minhas Passagens</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn-secundario">Sair</a>
+            {% else %}
+                <a href="{% url 'registrar' %}" class="btn-secundario">Cadastrar</a>
+                <a href="{% url 'login' %}" class="btn-principal">Entrar</a>
+            {% endif %}
         </nav>
     </header>
 
-    <main>
-        <section class="viagens-disponiveis">
-            <h2>Resultados da sua busca</h2>
-            <div class="listas-viagens" style="grid-template-columns: 1fr;"> <div class="lista">
-                    {% for viagem in resultados %}
-                        <a href="{% url 'detalhes_viagem' viagem.id %}" style="text-decoration: none; color: inherit;">
-                            <div class="item-viagem">
-                                <span>
-                                    {{ viagem.origem }} >> {{ viagem.destino }} >> {{ viagem.data_partida|date:"d/m/Y" }}
-                                </span>
-                            </div>
-                        </a>
-                    {% empty %}
-                        <p>Nenhuma viagem encontrada para os critérios informados.</p>
-                    {% endfor %}
-                </div>
+    <main class="search-results-container">
+        <div class="results-header">
+            <div>
+                <h2>Passagens Disponíveis</h2>
+                <p class="subtitulo" style="color: #555;">{{ origem_busca|default:'Qualquer origem' }} - {{ destino_busca|default:'Qualquer destino' }}</p>
             </div>
-        </section>
+            <div class="filter-options">
+                <span>Ordenar por:</span>
+                <a href="{% url 'buscar' %}?origem={{ request.GET.origem }}&destino={{ request.GET.destino }}&data_ida={{ request.GET.data_ida }}&sort=menor_preco" class="filter-link">Menor Preço</a>
+                <a href="{% url 'buscar' %}?origem={{ request.GET.origem }}&destino={{ request.GET.destino }}&data_ida={{ request.GET.data_ida }}&sort=maior_preco" class="filter-link">Maior Preço</a>
+            </div>
+        </div>
+
+        <div class="results-list">
+            {% for viagem in resultados %}
+                <div class="card-viagem">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-ship"></i>
+                            <h4>Embarcação - {{ viagem.embarcacao.nome }}</h4>
+                            <span class="tag-embarcacao">{{ viagem.embarcacao.tipo }}</span>
+                        </div>
+                        <a href="{% url 'detalhes_viagem' viagem.id %}" class="card-info">Mais Informações</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-trecho">
+                            <span>{{ viagem.data_partida|date:"d/m/Y" }}</span>
+                            <strong>{{ viagem.origem }}</strong>
+                            <span>{{ viagem.data_partida|date:"H:i" }}h</span>
+                        </div>
+                        <div class="card-arrow">--&gt;</div>
+                        <div class="card-trecho">
+                            <span>{{ viagem.data_chegada|date:"d/m/Y" }}</span>
+                            <strong>{{ viagem.destino }}</strong>
+                            <span>{{ viagem.data_chegada|date:"H:i" }}h</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-valor">
+                            Valor: <strong>R$ {{ viagem.preco|floatformat:2 }}</strong>
+                        </div>
+                        <a href="{% url 'detalhes_viagem' viagem.id %}" class="btn-selecionar">Selecionar</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="text-align: center; padding: 2rem; background-color: #fff; border-radius: 8px;">Nenhuma passagem encontrada para esta busca.</p>
+            {% endfor %}
+            
+            <a href="{% url 'home' %}" class="btn-secundario" style="margin-top: 2rem; display: block; text-align: center;">Voltar para a Home</a>
+        </div>
     </main>
 </body>
 </html>
